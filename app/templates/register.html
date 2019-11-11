@@ -2,8 +2,13 @@
 
 {% block content %}
 
+
+
 <div class="col-md-6 offset-md-3">
-  <form action="{{ url_for('register') }}" method='POST'>
+
+    <h3>Register</h3>
+
+    <form action="{{ url_for('register') }}" methods='GET, POST'>
       {{ form.hidden_tag() }}
       <div class="form-group">
           {{ form.name(class="form-control", placeholder="Name") }}

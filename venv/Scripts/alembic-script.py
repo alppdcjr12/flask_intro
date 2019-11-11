@@ -1,4 +1,4 @@
-#!"c:\users\peter\desktop\projects\coding temple\week_05\flask intro\venv\scripts\python.exe"
+#!c:\users\peter\desktop\projects\coding_temple\week_05\flask_intro\venv\scripts\python.exe
 # EASY-INSTALL-ENTRY-SCRIPT: 'alembic==1.3.0','console_scripts','alembic'
 __requires__ = 'alembic==1.3.0'
 import re

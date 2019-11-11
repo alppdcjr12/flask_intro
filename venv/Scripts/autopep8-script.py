@@ -1,4 +1,4 @@
-#!"C:\Users\peter\Desktop\Projects\Coding Temple\week_05\Flask Intro\venv\Scripts\python.exe"
+#!C:\Users\peter\Desktop\Projects\Coding_Temple\week_05\Flask_Intro\venv\Scripts\python.exe
 # EASY-INSTALL-ENTRY-SCRIPT: 'autopep8==1.4.4','console_scripts','autopep8'
 __requires__ = 'autopep8==1.4.4'
 import re

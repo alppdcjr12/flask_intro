@@ -16,7 +16,7 @@
 </head>
 
 <body>
-  {% include '.partials/navbar.html' %}
+  {% include 'partials/navbar.html' %}
 
   <div class="container">
     {% with messages = get_flashed_messages(with_categories=True) %}
@@ -29,7 +29,7 @@
             <strong>{{ message }}</strong> 
           </div>
         {% endfor %}
-        {% endif }
+        {% endif %}
     {% endwith %}
 
   {% block content %}

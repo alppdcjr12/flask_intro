@@ -23,12 +23,13 @@ def global_variables():
                 )
 
 
-@app.shell_context_processordef make_shell_context():
-return_dict(
-    app=app,
-    db=db,
-    User=User
-)
+@app.shell_context_processor
+def make_shell_context():
+    return_dict(
+        app=app,
+        db=db,
+        User=User
+    )
 
 
 @app.route('/')
@@ -54,6 +55,10 @@ def about():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+    context = {
+        'form': form
+    }
+    return render_template('register.html', **context)
     if form.validate_on_submit():
         u = User(
             name=form.name.data,
@@ -65,16 +70,12 @@ def register():
         db.session.commit()
         flash("You have registered successfully.", "info")
         return redirect(url_for('login'))
-    context = {
-        'form': form
-    }
-    return render_template('register.html', **context)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if formvalidate_on_submit():
+    if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
             return redirect(url_for('login'))
