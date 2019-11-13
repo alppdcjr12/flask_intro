@@ -16,22 +16,6 @@ from flask_login import login_user, logout_user
 # U - UPDATE: PUT
 # D - DELETE: DELETE
 
-
-@app.context_processor
-def global_variables():
-    return dict(username=''
-                )
-
-
-@app.shell_context_processor
-def make_shell_context():
-    return_dict(
-        app=app,
-        db=db,
-        User=User
-    )
-
-
 @app.route('/')
 def index():
     context = {
@@ -55,10 +39,6 @@ def about():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
-    context = {
-        'form': form
-    }
-    return render_template('register.html', **context)
     if form.validate_on_submit():
         u = User(
             name=form.name.data,
@@ -70,19 +50,26 @@ def register():
         db.session.commit()
         flash("You have registered successfully.", "info")
         return redirect(url_for('login'))
+    context = {
+        'form': form
+    }
+    return render_template('register.html', **context)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    context = {
+        'form': form
+    }
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            return redirect(url_for('login'))
             flash("Incorrect email or password. Try again.", "danger")
+            return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         flash("You have logged in successfully.", "success")
-        redirect(url_for('index'))
+        return redirect(url_for('index'))
 
     context = {
         'form': form
