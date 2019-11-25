@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ super() }} - Home {% endblock %}
+
+{% block content %}
+<div class="col-md-8 offset-md-2">
+    <h3>Home</h3>
+</div>
+<div class="col-md-8 offset-md-2">
+    <form action="{{ url_for('index') }}", method="POST">
+    {{form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.body(class="form-control", placeholder="Type post here") }}
+        </div>
+        <div class="submit">
+            {{ form.submit(class="btn btn-info") }}
+        </div>
+    </form>
+
+{% if posts %}    
+    {% for p in posts %}
+        {% include '_post.html' %}
+    {% endfor %}
+{% endif %}
+</div>
+
+<hr>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+{% endblock %}

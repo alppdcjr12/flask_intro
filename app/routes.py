@@ -1,8 +1,12 @@
-from flask import render_template, redirect, url_for, flash
-from app import app, db
-from app.forms import RegistrationForm, LoginForm
-from app.models import User
-from flask_login import login_user, logout_user
+from flask import render_template, redirect, url_for, flash, request
+from app import app, db, login
+from app.forms import ContactForm
+from app.models import User, Post, followers
+from flask_login import login_user, logout_user, current_user, login_required
+from datetime import datetime
+from app.email import send_email
+import requests, json
+from app.blueprints.users.forms import BlogForm
 
 # FLASK_LOGIN
 # .is_authenticated
@@ -16,69 +20,48 @@ from flask_login import login_user, logout_user
 # U - UPDATE: PUT
 # D - DELETE: DELETE
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
+    form = BlogForm()
     context = {
-        'names': ['Nicholas', 'Peter', 'Derek']
+        'form': form,
+        'posts': current_user.followed_posts(),
     }
-    return render_template('index.html', **context)
-
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
-
-@app.route('/about')
-def about():
-    context = {
-    }
-    return render_template('about.html', **context)
-
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
     if form.validate_on_submit():
-        u = User(
-            name=form.name.data,
-            email=form.email.data,
-            password=form.password.data
-        )
-        u.generate_password(u.password)
-        db.session.add(u)
+        p = Post(body=form.body.data, user_id=current_user.id)
+        db.session.add(p)
         db.session.commit()
-        flash("You have registered successfully.", "info")
-        return redirect(url_for('login'))
+        flash("Posted successfully", "success")
+        return redirect('/')
+    return render_template('users/index.html', **context)
+
+@app.route('/partials/navbar')
+def nav():
     context = {
-        'form': form
+
     }
-    return render_template('register.html', **context)
+    return render_template(url_for('navbar'), **context)
 
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
     context = {
+        'recipient_name': 'Peter Charland',
+        'sender_name': form.name.data,
+        'message': form.message.data,
+        'sender_email': form.email.data,
         'form': form
     }
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash("Incorrect email or password. Try again.", "danger")
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        flash("You have logged in successfully.", "success")
-        return redirect(url_for('index'))
+        send_email()
+        flash("Your message has been sent.")
+        return redirect(url_for('contact'))
+    return render_template('contact.html', **context)
 
-    context = {
-        'form': form
-    }
-    return render_template('login.html', **context)
+# @app.before_request()
+# def before_request():
+#     if current_user.is_authenticated:
+#         current_user.last_seen = datetime.utcnow()
+#         db.session.commit()
 
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
-    flash("Logout successful", "success")

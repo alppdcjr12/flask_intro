@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ super() }} - Weather API {% endblock %}
+
+{% block content %}
+<form action="{{ url_for('api.weather') }}" class="form-inline" method='POST'>
+    {{ form.hidden_tag() }}
+    <label class="sr-only" for="cityname">City:</label>
+    {{ form.city_name(class="form-control", placeholder="City Name", class="form-group form-control", style="width: 15%", style="margin-right: 5px") }}
+
+    {{ form.submit(class="btn btn-outline-success", style="width: 15%", style="margin-right: 5px") }}
+</form>
+<br>
+
+<div class="col-md-6 offset-md-3">
+    {% if data %}
+    <h4 class="text-center">Current Weather in {{ form.city_name.data.title() }}</h4>
+    {% else %}
+    <h4>Select a city to view the current weather.</h4>
+    {% endif %}
+</div>
+<hr />
+<div class="col-md-6 offset-md-3">
+    {% if form.validate_on_submit() %}
+    <div class="card" style="width: 16rem;">
+        <div class="card-body">
+            <h5 class="card-title">Sky</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ data.weather.0.main }}{% if data.clouds.all %},
+                {{ data.clouds.all }}&percnt; cloudy{% endif %}</h6>
+            <p class="card-text">Weather in {{ form.city_name.data }}: {{ data.weather.0.main }}.</p>
+        </div>
+    </div>
+    <div class="card" style="width: 16rem;">
+        <div class="card-body">
+            <h5 class="card-title">Temperature</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ f_temp }}&#8457;/{{ c_temp }}&#8451;</h6>
+            <p class="card-text">It's {{ f_temp }} degrees
+                Fahrenheit/{{ c_temp }} degrees Celsius in {{ form.city_name.data }}.</p>
+        </div>
+    </div>
+    <div class="card" style="width: 16rem;">
+        <div class="card-body">
+            <h5 class="card-title">Wind</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ data.wind.speed }} MPH</h6>
+            <p class="card-text">There is a {{ data.wind.speed }} MPH{% if data.wind.deg %}, {{ data.wind.deg }} degree directional{% endif %} wind in
+                {{ form.city_name.data }}.</p>
+        </div>
+    </div>
+
+
+    {% endif %}
+</div>
+
+{% endblock %}

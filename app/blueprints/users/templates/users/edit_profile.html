@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ super() }} - Edit Profile {% endblock %}
+
+{% block content %}
+
+<div class="col-md-6 offset-md-3">
+  <h3>Edit Profile</h3>
+  {% if current_user.is_anonymous %}
+  <h4>Welcome, New User</h4>
+  {% else %}
+  <div class="clearfix">
+    <h4 class="float-left">{{ current_user.name }} ({{ current_user.email }})</h4>
+    <span class="float-right"><a href="{{ url_for('users.users_delete', user=current_user) }}" class="btn btn-danger">Delete Account</a></span>
+  </div>
+  <hr>
+  <form action="{{ url_for('users.edit_profile') }}" method='POST'>
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.name(class="form-control", placeholder="Name") }}
+    </div>
+    <div class="form-group">
+      {{ form.email(class="form-control", placeholder="Email") }}
+    </div>
+    <div class="form-group">
+      {{ form.about_me(class="form-control", placeholder="About me") }}
+    </div>
+    <div class="form-group">
+      {{ form.password(class="form-control", placeholder="Password") }}
+    </div>
+    <div class="form-group">
+      {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.submit(class="btn btn-outline-success btn-block") }}
+    </div>
+</div>
+</form>
+
+{% endif %}
+{% endblock %}

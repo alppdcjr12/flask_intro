@@ -1,0 +1,7 @@
+{% block content %}
+<br>
+<p>
+    <img src={{ p.author.avatar(50) }}> {{ p.body }}<br>
+    &mdash; {{ p.author.name }} | <small>{{ p.timestamp.strftime("%a %b %d, %Y | %I:%M %p") }}</small><br>
+</p>
+{% endblock %}
