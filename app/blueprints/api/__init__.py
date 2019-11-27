@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 from app import db, login
 import requests
 import json
+import os
 
 bp = Blueprint('api', __name__, template_folder='templates')
 
@@ -40,7 +41,7 @@ def weather():
         #     cities_data = json.load(cities_file)
         #     city_id = str([city_dict['id'] for city_dict in cities_data if city_dict['name'] == form.city_name.data][0])
         weather_response=requests.get(
-            'http://api.openweathermap.org/data/2.5/weather?q=' + str(form.city_name.data) + WEATHER_API_STR)
+            'http://api.openweathermap.org/data/2.5/weather?q=' + str(form.city_name.data) + os.environ['WEATHER_API_STR'])
         data=weather_response.json()
         f_temp = round((data['main']['temp']-273.15) * (9/5) + 32, 1)
         c_temp = round((data['main']['temp']-273.15), 1)

@@ -1,42 +1,70 @@
+{% set nav_bar_main = [
+    ('/', 'users.index', 'Home'),
+    ('/contact', 'contact', 'Contact')
+    ] -%}
+
+{% set nav_bar_api = [
+    ('/api/racers', 'api.racers', 'Racers Data'),
+    ('/api/weather', 'api.weather', 'Weather Data')
+    ] -%}
+
+{% set api_labels = [] %}
+{% for url, route, label in nav_bar_api %}
+<span class="sr-only">{{ api_labels.append(label) }}</span>
+{% endfor %}
+
+
+{% if current_user.is_authenticated %}
+    {% set nav_bar_logged_in = [
+        (url_for('users.users'), 'users.users', 'Users'),
+        (url_for('users.profile', id=current_user.id), 'users.profile', 'Profile'),
+        (url_for('account.logout'), 'users.logout', 'Logout')
+        ] -%}
+{% else %}
+    {% set nav_bar_anon = [
+            ('/account/register', 'account.register', 'Register'),
+            ('/account/login', 'account.login', 'Login')
+            ] -%}
+{% endif %}
+
+{% set active_page = active_page |default('Home') -%}
+
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">Flask Intro</a>
     <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
         aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavId">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
+            {% for url, route, label in nav_bar_main %}
+            <li class="nav-item {{ 'active' if active_page==label }}">
+                <a class="nav-link" href="{{ url }}">{{ label }}</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('api.racers') }}">Racers Data</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('api.weather') }}">Weather Data</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+            {% endfor %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {{ 'active' if active_page in api_labels }}" data-toggle="dropdown"
+                    href="">API Data</a>
+                <ul class="dropdown-menu">
+                    {% for url, route, label in nav_bar_api %}
+                    <li><a href="{{ url }}"" class=" dropdown-item">{{ label }}</a></li>
+                    {% endfor %}
+                </ul>
             </li>
         </ul>
         <ul class="navbar-nav m1-auto">
             {% if current_user.is_authenticated %}
+            {% for url, route, label in nav_bar_logged_in %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('users.users') }}">Users</a>
+                <a class="nav-link {{ 'active' if active_page==label }}" href="{{ url }}">{{ label }}</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('users.profile', id=current_user.id) }}">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('account.logout') }}">Logout</a>
-            </li>
+            {% endfor %}
             {% else %}
+            {% for url, route, label in nav_bar_anon %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('account.register') }}">Register</a>
+                <a class="nav-link {{ 'active' if active_page==label }}" href="{{ url }}">{{ label }}</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('account.login') }}">Login</a>
-            </li>
+            {% endfor %}
             {% endif %}
         </ul>
     </div>

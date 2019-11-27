@@ -2,6 +2,8 @@
 
 {% block title %} {{ super() }} - Weather API {% endblock %}
 
+{% set active_page="Weather Data" %}
+
 {% block content %}
 <form action="{{ url_for('api.weather') }}" class="form-inline" method='POST'>
     {{ form.hidden_tag() }}

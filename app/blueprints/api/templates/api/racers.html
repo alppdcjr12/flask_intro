@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 
+{% set active_page="Racers Data" %}
+
 {% block title %} {{ super() }} - Racers API {% endblock %}
+
 
 {% block content %}
 <form action="{{ url_for('api.racers') }}" class="form-inline" method='POST'>
