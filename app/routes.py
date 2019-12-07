@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 from app import app, db, login
 from app.forms import ContactForm
 from app.models import User, Post, followers
@@ -38,9 +38,11 @@ def index():
 
 @app.route('/partials/navbar')
 def nav():
-    context = {
-
-    }
+    context = {}
+    if session['cart']:
+        item_count = len(session['cart'])
+        context['item_count'] = item_count
+        print(item_count)
     return render_template(url_for('navbar'), **context)
 
 @app.route('/contact', methods=['GET', 'POST'])

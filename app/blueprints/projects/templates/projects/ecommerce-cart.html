@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ super() }} - E-commerce (Cart) {% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('projects.static', filename='css/projects.css') }}">
+{% endblock %}
+
+{% set active_page="projects.ecommerce" %}
+
+{% block content %}
+<h4>
+    Cart
+    {% if cart %}<span class="float-right"><a href="{{ url_for('projects.ecommerceCartClear') }}"
+            class="btn btn-danger">Clear Cart</a></span>{% endif %}
+</h4>
+
+{% if not cart %}
+<p>You have no items in your cart.</p>
+<br>
+<a href="{{ url_for('projects.ecommerce') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i>Continue
+    Shopping</a>
+<hr>
+
+{% else %}
+<table id="cart" class="table table-hover table-condensed">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th class="text-center">Subtotal</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in displayCart %}
+        <tr>
+            <td data-th="Product">
+                <div class="row">
+                    <div class="col-sm-2 hidden-xs"><img src="{{ p.image }}" alt="{{ p.name }}" class="img-fluid" />
+                    </div>
+                    <div class="col-sm-10">
+                        <h4 class="nomargin">{{ p.name }}</h4>
+                        <p>PRODUCT DESCRIPTION</p>
+                    </div>
+                </div>
+            </td>
+            <td data-th="Price">${{ p.price }}</td>
+            <td data-th="Quantity">x{{ cart.count(p) }}</td>
+            <td data-th="Subtotal" class="text-center">${{ p.price * cart.count(p) }}</td>
+            <td data-th="actions" data-th="">
+                <a href="{{ url_for('projects.ecommerceCartRemove', id=p.id) }}"
+                    class="btn btn-danger btn-sm">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><a href="{{ url_for('projects.ecommerce') }}" class="btn btn-warning"><i
+                        class="fa fa-angle-left"></i>Continue Shopping</a></td>
+            <td colspan="2" class="hidden-xs"></td>
+            <td class="hidden-xs text-center"><strong>{{ grandTotal }}</strong></td>
+            <td><a href="#" class="btn btn-success btn-block">CHECKOUT <i class="fa fa-angle-right"></i></a></td>
+        </tr>
+    </tfoot>
+</table>
+{% endif %}
+
+{% endblock %}

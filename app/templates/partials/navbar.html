@@ -13,15 +13,24 @@
 <span class="sr-only">{{ api_labels.append(label) }}</span>
 {% endfor %}
 
+{% set nav_bar_projects = [
+    ('/projects/ecommerce', 'projects.ecommerce', 'Ecommerce'),
+    ('projects/databases', 'projects.databases', 'Databases')
+    ] %}
+
+{% set projects_labels = ['Cart'] %}
+{% for url, route, label in nav_bar_projects %}
+<span class="sr-only">{{ projects_labels.append(label) }}</span>
+{% endfor %}
 
 {% if current_user.is_authenticated %}
-    {% set nav_bar_logged_in = [
+{% set nav_bar_logged_in = [
         (url_for('users.users'), 'users.users', 'Users'),
         (url_for('users.profile', id=current_user.id), 'users.profile', 'Profile'),
         (url_for('account.logout'), 'users.logout', 'Logout')
         ] -%}
 {% else %}
-    {% set nav_bar_anon = [
+{% set nav_bar_anon = [
             ('/account/register', 'account.register', 'Register'),
             ('/account/login', 'account.login', 'Login')
             ] -%}
@@ -51,9 +60,27 @@
                     {% endfor %}
                 </ul>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {{ 'active' if active_page in projects_labels }}"
+                    data-toggle="dropdown" href="">Projects</a>
+                <ul class="dropdown-menu">
+                    {% for url, route, label in nav_bar_projects %}
+                    <li><a href="{{ url }}"" class=" dropdown-item">{{ label }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
         </ul>
         <ul class="navbar-nav m1-auto">
             {% if current_user.is_authenticated %}
+            <li>
+                <span class="fa-layers fa-fw" style="position:relative">
+                    <a class="fas fa-shopping-cart fa-2x" style="color:rgb(0,123,255)"
+                        href="{{ url_for('projects.ecommerceCart') }}"></a>
+                    <span class="fa-layers-counter badge fa-layers-top-right" data-fa-transform="left-10 up-20"
+                        style="background-color: rgb(40, 167, 69)">{{ session['cart-count'] }}</span>
+                </span>
+            </li>
+            <!--  -->
             {% for url, route, label in nav_bar_logged_in %}
             <li class="nav-item">
                 <a class="nav-link {{ 'active' if active_page==label }}" href="{{ url }}">{{ label }}</a>

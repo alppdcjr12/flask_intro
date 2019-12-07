@@ -1,0 +1,49 @@
+<div class="modal" tabindex="-1" role="dialog" id="product-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ p.name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label class="mr-sm-2 float-left" for="modal-price-display" id="modal-price-label">Price: </label>
+                <div id="modal-wrap">
+                    <h5 id="modal-price-display" class="float-left">${{ p.price }}</h5>
+                    <h6 id="modal-price-counter" class="float-left"></h6>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form class="form-inline" method="POST" action="{{ url_for('projects.ecommerceCartAdd', id=p.id) }}">
+                    <div class="input-group">
+
+                        <label class="mr-sm-2 float-left" for="prod-quantity-select">Quantity: </label>
+                        <select class="custom-select float-left m-1" id="prod-quantity-select" onchange="AdjustQuantity()"
+                            name="modal-product-quantity">
+                            <option selected value="1">1</option>
+                            {% for i in range(2, 100) %}
+                            <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <script>
+
+                        function AdjustQuantity() {
+                            var q = document.getElementById("prod-quantity-select");
+                            var quantity = q.options[q.selectedIndex].value;
+
+                            document.getElementById("modal-price-label").innerHTML = 'Total: ';
+                            document.getElementById("modal-price-counter").innerHTML = '(x' + quantity + ')';
+                        }
+
+                    </script>
+                    <button type="submit" class="btn btn-primary btn-sm"> Add to
+                        cart
+                    </button>
+                </form>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

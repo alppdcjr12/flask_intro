@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ super() }} - E-commerce {% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('projects.static', filename='css/projects.css') }}">
+{% endblock %}
+
+{% set active_page="projects.ecommerce" %}
+
+{% block content %}
+
+<h4>
+    E-Commerce
+    <span class='float-right'><a href="{{ url_for('projects.ecommerceCart') }}" class="btn btn-primary">Cart</a></span>
+</h4>
+
+<hr>
+
+<div class="row">
+    <!-- <div class="ecommerce-margin"> -->
+
+    {% for p in products %}
+    <div class="col-md-4">
+        <figure class="card card-product p-3">
+
+            <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#product-modal">
+                Item Info
+            </button>
+            {% include 'projects/partials/product_modal.html' %}
+
+            ​
+            ​
+            <div class="img-wrap">
+                <img class="img-fluid" src="{{ p.image }}" />
+            </div>
+            <figcaption class="info-wrap">
+                <h6 class="title text-dots"><a href="#" data-toggle="modal"
+                        data-target="#productModal_{{ p.id }}">{{ p.name }}</a></h6>
+                <div class="action-wrap">
+                    <a href="{{ url_for('projects.ecommerceCartAdd', id=p.id) }}"
+                        class="btn btn-primary btn-sm float-right"> Add to cart </a>
+                    <div class="price-wrap h5">
+                        <span class="price-new">${{ p.price }}</span>
+                        <!-- <del class="price-old">$1980</del> -->
+                    </div> <!-- price-wrap.// -->
+                </div> <!-- action-wrap -->
+            </figcaption>
+        </figure> <!-- card // -->
+    </div> <!-- col // -->
+    {% endfor %}
+</div> <!-- row.// -->
+<!-- </div> -->
+
+{% endblock %}

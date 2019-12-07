@@ -27,6 +27,9 @@ app.register_blueprint(users_bp, url_prefix='/users')
 from app.blueprints.api import bp as api_bp
 app.register_blueprint(api_bp, url_prefix='/api')
 
+from app.blueprints.projects import bp as projects_bp
+app.register_blueprint(projects_bp, url_prefix='/projects')
+
 from app.blueprints.errors import bp as errors_bp
 app.register_blueprint(errors_bp, url_prefix='/errors')
 
