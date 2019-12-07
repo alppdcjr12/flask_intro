@@ -2,21 +2,21 @@ nav {
     margin-bottom: 25px;
 }
 
-.badge {
-    content:"100";
-    position: fixed;
-    background: rgba(0, 0, 255, 1);
-    height: 2rem;
-    top: 1rem;
-    right: 1.5rem;
-    width: 2rem;
-    text-align: center;
-    line-height: 2rem;
-    ;
-    font-size: 1rem;
-    border-radius: 50%;
-    color: white;
-    border: 1px solid blue;
-    margin-left: -2em;
-    margin-top: -2em;
+/* Not being used due to all pertinent HTML being in a partial file referenced in parent HTML body */
+.cart-success {
+    color: rgb(0, 123, 255);
+}
+
+/* Not being used due to all pertinent HTML being in a partial file referenced in parent HTML body */
+.cart-circle-custom {
+    color: rgb(40, 167, 69);
+    margin-top: -0.8rem;
+    margin-left: 1rem;
+}
+
+/* Not being used due to all pertinent HTML being in a partial file referenced in parent HTML body */
+.cart-count-position {
+    margin-top: -2.3rem;
+    color: black;
+    font-size: 0.7rem;
 }
